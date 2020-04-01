@@ -1,6 +1,6 @@
 package com.asdmorning3.basic;
 
-import javafx.util.Pair;
+//import javafx.util.Pair;
 
 import javax.swing.*;
 import java.awt.*;
