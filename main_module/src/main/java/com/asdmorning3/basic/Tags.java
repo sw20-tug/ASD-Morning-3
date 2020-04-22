@@ -1,8 +1,9 @@
 package com.asdmorning3.basic;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class Tags {
+public class Tags implements Serializable {
     private String description_;
     private Color color_;
 

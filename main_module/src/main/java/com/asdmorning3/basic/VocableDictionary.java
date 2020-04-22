@@ -44,6 +44,7 @@ public class VocableDictionary implements Serializable {
 	{
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
 		oos.writeObject(vocableList);
+		oos.writeObject(tagsList);
 		oos.close();
 	}
 
@@ -51,6 +52,7 @@ public class VocableDictionary implements Serializable {
 	{
 		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path));
 		vocableList = (HashSet<Vocable>) ois.readObject();
+		tagsList = (ArrayList<Tags>) ois.readObject();
 	}
 
 	public void addVocable(Vocable ... vocables)
@@ -85,26 +87,102 @@ public class VocableDictionary implements Serializable {
 
 	public Tags createTag(String description, Color color)
 	{
+		Tags tag = getTagByDescription(description);
+		if(tag != null)
+			return tag;
+
+		tag = new Tags(description, color);
+		tagsList.add(tag);
+		return tag;
+	}
+
+	public Tags getTagByDescription(String description)
+	{
 		for(Tags tag : tagsList)
 		{
 			if(tag.getDescription().equals(description))
 				return tag;
 		}
-		Tags tag = new Tags(description, color);
-		tagsList.add(tag);
-		return tag;
+
+		return null;
+	}
+
+	public ArrayList<Tags> getTagsList()
+	{
+		return tagsList;
 	}
 
 	public void addTagToVocable(Tags tag, Vocable vocable)
 	{
-		boolean addSuccess = vocable.addTag(tag);
+		vocable.addTag(tag);
 	}
 
 	public void removeTagToVocable(Tags tag, Vocable vocable)
 	{
-		boolean removeSuccess = vocable.removeTag(tag);
+		vocable.removeTag(tag);
 	}
 
+	public ArrayList<Vocable> getVocablesByTag(Tags tag, HashSet<Vocable> list)
+	{
+		ArrayList<Vocable> vocables = new ArrayList<>();
+		for (Vocable vocable : list)
+		{
+			if(vocable.hasTag(tag))
+				vocables.add(vocable);
+		}
+		return  vocables;
+	}
 
+	public void changeVocableRating(Vocable.Rating rating, Vocable vocable)
+	{
+		vocable.changeRating(rating);
+	}
+
+	public Vocable.Rating getVocableRating(Vocable vocable)
+	{
+		return vocable.getRating();
+	}
+
+	public ArrayList<Vocable> getVocablesSortedAsc(HashSet<Vocable> list)
+	{
+		ArrayList<Vocable> sortedVocables = new ArrayList<>();
+		for(Vocable.Rating rating : Vocable.Rating.values())
+		{
+			for (Vocable vocable : list)
+			{
+				if(vocable.getRating().equals(rating))
+					sortedVocables.add(vocable);
+			}
+		}
+
+		return  sortedVocables;
+	}
+
+	public ArrayList<Vocable> getVocablesSortedDesc(HashSet<Vocable> list)
+	{
+		ArrayList<Vocable> sortedVocables = new ArrayList<>();
+
+		for(int index = Vocable.Rating.values().length; index >= 0; index--)
+		{
+			for (Vocable vocable : list)
+			{
+				if(vocable.getRating().equals(Vocable.Rating.values()[index]))
+					sortedVocables.add(vocable);
+			}
+		}
+
+		return  sortedVocables;
+	}
+
+	public ArrayList<Vocable> getVocablesByRating(Vocable.Rating rating, HashSet<Vocable> list)
+	{
+		ArrayList<Vocable> vocables = new ArrayList<>();
+		for (Vocable vocable : list)
+		{
+			if(vocable.getRating().equals(rating))
+				vocables.add(vocable);
+		}
+		return  vocables;
+	}
 
 }
