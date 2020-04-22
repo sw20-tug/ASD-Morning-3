@@ -13,6 +13,10 @@ public class main {
 		VocableDictionary dictionary = new VocableDictionary();
 		dictionary.addVocable(new Vocable("hallo", Vocable.Language.GER),
 				new Vocable("hello", Vocable.Language.ENG));
+		dictionary.addVocable(new Vocable("Katze", Vocable.Language.GER),
+				new Vocable("cat", Vocable.Language.ENG));
+		dictionary.addVocable(new Vocable("Hund", Vocable.Language.GER),
+				new Vocable("dog", Vocable.Language.ENG));
 		studyInterface Interface = new studyInterface(dictionary);
 
 	}

@@ -7,11 +7,11 @@ import java.awt.event.*;
 import java.util.*;
 import java.io.*;
 import com.asdmorning3.basic.Vocable;
+import com.asdmorning3.basic.Vocable.Language;
 import com.asdmorning3.basic.VocableDictionary;
 import com.asdmorning3.test.InterfaceLanguages;
 import junit.runner.Version;
-
-
+import java.lang.*;
 
 
 public class studyInterface {
@@ -24,23 +24,40 @@ public class studyInterface {
     InterfaceLanguages inter;
     VocableDictionary dictionary;
 
+    private java.util.List<Vocable> vocableList;
+
     public studyInterface(VocableDictionary dictionary_) {
+
+        dictionary = dictionary_;
 
         frame = new JFrame("Study Interface");
         JPanel pane = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         frame.setSize(600, 600);
 
-        dictionary = dictionary_;
         ArrayList<String> languages = new ArrayList<String>();
         for (Vocable.Language language: Vocable.Language.class.getEnumConstants())
         {
             languages.add(language.name());
         }
+        vocableList = dictionary.getAllFromLanguage(Language.ENG);
+        int size = vocableList.size();
+        String[] eng_words = new String[size];
+        for(int counter = 0; counter < vocableList.size(); counter++)
+        {
+            eng_words[counter] = vocableList.get(counter).getWord();
+        }
+        vocableList = dictionary.getAllFromLanguage(Language.GER);
+        size = vocableList.size();
+        String[] ger_words = new String[size];
+        for(int counter = 0; counter < vocableList.size(); counter++)
+        {
+            ger_words[counter] = vocableList.get(counter).getWord();
+        }
 
         //String[] languages = {"English", "German"};
-        final String[] english = {"house", "dog", "cat", "mouse"};
-        final String[] german = {"Haus", "Hund", "Katze", "Maus"};
+        final String[] english = eng_words;
+        final String[] german = ger_words;
         final JComboBox fromLanguage = new JComboBox(new DefaultComboBoxModel<String>(languages.toArray(new String[0])));
         final JComboBox toLanguage = new JComboBox(new DefaultComboBoxModel<String>(languages.toArray(new String[0])));
         final JComboBox setAnotherLanguage;
@@ -115,11 +132,39 @@ public class studyInterface {
         list.addListSelectionListener(new ListSelectionListener() {
 
             public void valueChanged(ListSelectionEvent event) {
+                Object obj = toLanguage.getSelectedItem();
+                String currentLanguage = String.valueOf(obj);
                 if (!event.getValueIsAdjusting()){
                     JList source = (JList)event.getSource();
                     String selected = source.getSelectedValue().toString();
-                    // TEST
-                    System.out.println(selected);
+                    if (currentLanguage == "ENG") {
+                        int index = 0;
+                        for(int counter = 0; counter < english.length; counter++)
+                        {
+                            if(english[counter].equals(selected))
+                            {
+                                index = counter;
+                                break;
+                            }
+                        }
+                        vocableList = dictionary.getAllFromLanguage(Language.GER);
+                        Vocable eng = vocableList.get(index);
+                        JOptionPane.showMessageDialog(frame, eng.getWord());
+                    }
+                    else if(currentLanguage == "GER") {
+                        int index = 0;
+                        for(int counter = 0; counter < german.length; counter++)
+                        {
+                            if(german[counter].equals(selected))
+                            {
+                                index = counter;
+                                break;
+                            }
+                        }
+                        vocableList = dictionary.getAllFromLanguage(Language.ENG);
+                        Vocable ger = vocableList.get(index);
+                        JOptionPane.showMessageDialog(frame, ger.getWord());
+                    }
                 }
             }
 
