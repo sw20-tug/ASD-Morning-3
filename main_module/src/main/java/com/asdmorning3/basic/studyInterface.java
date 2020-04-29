@@ -19,10 +19,12 @@ public class studyInterface {
     static JFrame frame;
     private static JDialog d;
     static JList list;
-    JLabel lblLang1;
-    JLabel lblLang2;
-    InterfaceLanguages inter;
+    public JLabel lblLang1;
+    public JLabel lblLang2;
     VocableDictionary dictionary;
+    JTextField t1;
+    HashMap <String, Vocable.Language> language_list = new HashMap();
+    Vocable test_2;
 
     private java.util.List<Vocable> vocableList;
 
@@ -39,25 +41,9 @@ public class studyInterface {
         for (Vocable.Language language: Vocable.Language.class.getEnumConstants())
         {
             languages.add(language.name());
-        }
-        vocableList = dictionary.getAllFromLanguage(Language.ENG);
-        int size = vocableList.size();
-        String[] eng_words = new String[size];
-        for(int counter = 0; counter < vocableList.size(); counter++)
-        {
-            eng_words[counter] = vocableList.get(counter).getWord();
-        }
-        vocableList = dictionary.getAllFromLanguage(Language.GER);
-        size = vocableList.size();
-        String[] ger_words = new String[size];
-        for(int counter = 0; counter < vocableList.size(); counter++)
-        {
-            ger_words[counter] = vocableList.get(counter).getWord();
+            language_list.put(language.name(), language);
         }
 
-        //String[] languages = {"English", "German"};
-        final String[] english = eng_words;
-        final String[] german = ger_words;
         final JComboBox fromLanguage = new JComboBox(new DefaultComboBoxModel<String>(languages.toArray(new String[0])));
         final JComboBox toLanguage = new JComboBox(new DefaultComboBoxModel<String>(languages.toArray(new String[0])));
         final JComboBox setAnotherLanguage;
@@ -92,13 +78,17 @@ public class studyInterface {
         c.gridy = 4;
         pane.add(button, c);
 
-        c.gridx = 0;
+        c.gridx = 1;
         c.gridy = 5;
         list = new JList();
         JScrollPane scrollPane = new JScrollPane(list);
 
         pane.add(scrollPane, c);
 
+        c.gridx = 0;
+        c.gridy = 5;
+        t1 = new JTextField();
+        pane.add(t1, c);
         frame.add(pane);
         button.addActionListener(new ActionListener()
         {
@@ -111,12 +101,15 @@ public class studyInterface {
                 String secondCurrentLanguage = String.valueOf(obj2);
 
                 if(currentLanguage != secondCurrentLanguage) {
-                    if (currentLanguage == "ENG") {
-                        list.setListData(english);
+                    vocableList = dictionary.getAllFromLanguage(language_list.get(currentLanguage));
+                    int size = vocableList.size();
+                    String[] words = new String[size];
+                    for(int counter = 0; counter < vocableList.size(); counter++)
+                    {
+                        words[counter] = vocableList.get(counter).getWord();
                     }
-                    else if(currentLanguage == "GER") {
-                        list.setListData(german);
-                    }
+                    final String[] final_list = words;
+                    list.setListData(final_list);
                 }
                 else
                     JOptionPane.showMessageDialog(frame,
@@ -132,40 +125,18 @@ public class studyInterface {
         list.addListSelectionListener(new ListSelectionListener() {
 
             public void valueChanged(ListSelectionEvent event) {
-                Object obj = toLanguage.getSelectedItem();
+                Object obj = fromLanguage.getSelectedItem();
                 String currentLanguage = String.valueOf(obj);
                 if (!event.getValueIsAdjusting()){
                     JList source = (JList)event.getSource();
                     String selected = source.getSelectedValue().toString();
-                    if (currentLanguage == "ENG") {
-                        int index = 0;
-                        for(int counter = 0; counter < english.length; counter++)
+                    HashSet<Vocable> test = dictionary.getVocableList();
+                    for(Vocable i : test)
+                        if(i.getWord().equals(selected))
                         {
-                            if(english[counter].equals(selected))
-                            {
-                                index = counter;
-                                break;
-                            }
+                          t1.setText(i.getTranslation(language_list.get(currentLanguage)).getWord());
                         }
-                        vocableList = dictionary.getAllFromLanguage(Language.GER);
-                        Vocable eng = vocableList.get(index);
-                        JOptionPane.showMessageDialog(frame, eng.getWord());
                     }
-                    else if(currentLanguage == "GER") {
-                        int index = 0;
-                        for(int counter = 0; counter < german.length; counter++)
-                        {
-                            if(german[counter].equals(selected))
-                            {
-                                index = counter;
-                                break;
-                            }
-                        }
-                        vocableList = dictionary.getAllFromLanguage(Language.ENG);
-                        Vocable ger = vocableList.get(index);
-                        JOptionPane.showMessageDialog(frame, ger.getWord());
-                    }
-                }
             }
 
         });
