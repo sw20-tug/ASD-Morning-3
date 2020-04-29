@@ -78,17 +78,5 @@ public class VocableDictionary implements Serializable {
 		}
 		vocableList.addAll(Arrays.asList(vocables));
 	}
-//TODO
-	public List<Vocable> getAllFromLanguage(Vocable.Language lang)
-	{
-		List<Vocable> vocables = new ArrayList<>();
-		for(Vocable v : vocableList)
-		{
-			if(v.getLanguage() == lang)
-				vocables.add(v);
-		}
-		return vocables;
-	}
-
 
 }
