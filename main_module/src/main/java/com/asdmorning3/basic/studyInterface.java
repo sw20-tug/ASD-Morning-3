@@ -19,19 +19,21 @@ public class studyInterface {
     static JFrame frame;
     private static JDialog d;
     static JList list;
-    public JLabel lblLang1;
-    public JLabel lblLang2;
+    public JLabel lblLang1 = new JLabel();
+    public JLabel lblLang2 = new JLabel();
+    public JButton button = new JButton();
     VocableDictionary dictionary;
+    InterfaceLanguages.Languages interface_languages;
     JTextField t1;
     HashMap <String, Vocable.Language> language_list = new HashMap();
-    Vocable test_2;
 
     private java.util.List<Vocable> vocableList;
 
-    public studyInterface(VocableDictionary dictionary_) {
+    public studyInterface(VocableDictionary dictionary_, InterfaceLanguages.Languages lang) {
 
         dictionary = dictionary_;
-
+        interface_languages = lang;
+        setIntLang(this.interface_languages);
         frame = new JFrame("Study Interface");
         JPanel pane = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -48,8 +50,6 @@ public class studyInterface {
         final JComboBox toLanguage = new JComboBox(new DefaultComboBoxModel<String>(languages.toArray(new String[0])));
         final JComboBox setAnotherLanguage;
 
-        lblLang1 = new JLabel("From:");
-        lblLang2 = new JLabel("To:");
         c.gridx = 0;
         c.gridy = 0;
         c.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -72,8 +72,6 @@ public class studyInterface {
         c.insets = new Insets(10, 0, 10, 55);
         pane.add(toLanguage, c);
 
-
-        JButton button = new JButton("Show vocabulary");
         c.gridx = 1;
         c.gridy = 4;
         pane.add(button, c);
@@ -143,5 +141,12 @@ public class studyInterface {
 
         frame.setVisible(true);
 
+    }
+
+    public void setIntLang(InterfaceLanguages.Languages lang)
+    {
+        lblLang1.setText("From:");
+        lblLang2.setText("To:");
+        button.setText("Show vocabulary");
     }
 }
