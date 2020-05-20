@@ -1,5 +1,6 @@
 package com.asdmorning3.test;
 
+import com.asdmorning3.basic.GUI;
 import com.asdmorning3.basic.Vocable;
 import com.asdmorning3.basic.VocableDictionary;
 import com.asdmorning3.basic.Tags;
@@ -10,9 +11,11 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 
 public class TestVocabulary {
     static JFrame frame;
@@ -128,6 +131,7 @@ public class TestVocabulary {
 
         c.gridx = 0;
         c.gridy = 11;
+        txtNumber.setPreferredSize(new Dimension(30, 20));
         pane.add(txtNumber, c);
 
         c.gridx = 2;
@@ -162,6 +166,158 @@ public class TestVocabulary {
 
         });
 
+        button_add_all.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                test_array = (ArrayList<Vocable>)vocab_array.clone();
+                String[] words = new String[test_array.size()];
+                for (int counter = 0; counter < test_array.size(); counter++) {
+                    words[counter] = test_array.get(counter).getWord();
+                }
+                final String[] final_list = words;
+                list_vocabs.setListData(final_list);
+                printTestVocabs();
+            }
+
+        });
+
+        button_remove_all.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                test_array.clear();
+                String[] words = new String[0];
+
+                final String[] final_list = words;
+                printTestVocabs();
+            }
+        });
+
+        button_start.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(test_array.size() == 0)
+                    return;
+
+                JFrame frame2 = new JFrame("Test");
+                JPanel pane = new JPanel(new GridBagLayout());
+                GridBagConstraints c = new GridBagConstraints();
+
+                JTextField vocable_field = new JTextField();
+                JTextField translation_field = new JTextField();
+                JButton button_show = new JButton();
+                JButton button_right = new JButton();
+                JButton button_wrong = new JButton();
+
+                InterfaceLanguages languages;
+                languages = new InterfaceLanguages();
+
+                button_show.setText(languages.getString(lang, "show"));
+                button_right.setText(languages.getString(lang, "right"));
+                button_wrong.setText(languages.getString(lang, "wrong"));
+
+                frame2.setSize(300, 500);
+
+                c.gridx = 0;
+                c.gridy = 0;
+                c.gridwidth = 2;
+                c.insets = new Insets(20, 20, 20, 20);
+                vocable_field.setPreferredSize(new Dimension(220, 50));
+                vocable_field.setEditable(false);
+                pane.add(vocable_field, c);
+
+                c.gridx = 0;
+                c.gridy = 1;
+                c.gridwidth = 2;
+                //button_show.setPreferredSize(new Dimension(75, 25));
+                pane.add(button_show, c);
+
+                c.gridx = 0;
+                c.gridy = 2;
+                c.gridwidth = 2;
+                translation_field.setPreferredSize(new Dimension(220, 50));
+                translation_field.setEditable(false);
+                pane.add(translation_field, c);
+
+                c.gridx = 0;
+                c.gridy = 3;
+                c.gridwidth = 1;
+                //button_right.setPreferredSize(new Dimension(75, 25));
+                pane.add(button_right, c);
+
+                c.gridx = 1;
+                c.gridy = 3;
+                c.gridwidth = 1;
+                //button_wrong.setPreferredSize(new Dimension(75, 25));
+                pane.add(button_wrong, c);
+
+                frame2.add(pane);
+                frame2.setVisible(true);
+
+                int reps;
+                try
+                {
+                    reps = Integer.parseInt(txtNumber.getText().trim());
+                }
+                catch (NumberFormatException nfe)
+                {
+                    reps = 1;
+                }
+                Vocable.Language from = Vocable.Language.valueOf(comboBoxFromLang.getSelectedItem().toString());
+                Vocable.Language to = Vocable.Language.valueOf(comboBoxToLang.getSelectedItem().toString());
+                TestEntity ti = new TestEntity(test_array, reps, from, to);
+
+                Vocable nextVocable = ti.getNextVocable();
+                vocable_field.setText(nextVocable.getWord(from));
+                vocable_field.setHorizontalAlignment(JTextField.CENTER);
+                vocable_field.setForeground(Color.BLACK);
+                translation_field.setText(nextVocable.getWord(to));
+                translation_field.setForeground(translation_field.getBackground());
+                translation_field.setHorizontalAlignment(JTextField.CENTER);
+
+                button_show.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        translation_field.setForeground(Color.BLACK);
+                    }
+                });
+
+                button_right.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        ti.guessedLastVocable(true);
+
+                        Vocable nextVocable = ti.getNextVocable();
+                        if(ti.test_finished)
+                        {
+                            ti.showStats();
+                            frame2.dispose();
+                            return;
+                        }
+
+                        vocable_field.setText(nextVocable.getWord(from));
+                        translation_field.setText(nextVocable.getWord(to));
+                        translation_field.setForeground(translation_field.getBackground());
+
+
+                    }
+                });
+
+                button_wrong.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        ti.guessedLastVocable(false);
+                        if(ti.test_finished)
+                        {
+                            ti.showStats();
+                            frame2.dispose();
+                            return;
+                        }
+                        Vocable nextVocable = ti.getNextVocable();
+                        vocable_field.setText(nextVocable.getWord(from));
+                        translation_field.setText(nextVocable.getWord(to));
+                        translation_field.setForeground(translation_field.getBackground());
+
+                    }
+                });
+
+
+
+            }
+        });
 
         list_vocabs.addListSelectionListener(new ListSelectionListener() {
 
@@ -204,6 +360,11 @@ public class TestVocabulary {
             }
 
         });
+
+
+
+
+
         setIntLang(lang);
 
     }
