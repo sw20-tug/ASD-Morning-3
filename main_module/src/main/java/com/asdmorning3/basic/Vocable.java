@@ -18,7 +18,7 @@ public class Vocable implements Serializable {
 		this.translation_ = new HashMap<Language, Vocable>();
 		this.tags_ = new ArrayList<Tags>();
 		this.rating_ = Difficulty.MEDIUM;
-		this.rating_2_ = Rating.NORMAL;
+		//this.rating_2_ = Rating.NORMAL;
 	}
 
 	public void increaseDifficulty() {
@@ -46,14 +46,6 @@ public class Vocable implements Serializable {
 		FRA
 	}
 
-	public enum Rating
-	{
-		VERY_EASY,
-		EASY,
-		NORMAL,
-		DIFFICULT,
-		VERY_DIFFICULT
-	}
 
 	public enum Difficulty{
 		EASY,
@@ -64,8 +56,6 @@ public class Vocable implements Serializable {
 	private String word_;
 
 	private Language language_ ;
-
-	private Rating rating_2_;
 
 	private HashMap<Language, Vocable> translation_;
 
@@ -246,14 +236,19 @@ public class Vocable implements Serializable {
 		return false;
 	}
 
-	public void changeRating(Rating rating)
+	/*public void changeRating(Rating rating)
 	{
 		this.rating_2_ = rating;
+	}*/
+
+	public void changeDifficulty(Difficulty rating)
+	{
+		this.rating_ = rating;
 	}
 
-	public Rating getRating()
+	public Difficulty getDifficluty()
 	{
-		return this.rating_2_;
+		return this.rating_;
 	}
 
 }

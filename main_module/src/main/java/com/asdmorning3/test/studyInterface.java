@@ -29,7 +29,7 @@ public class studyInterface {
     public JButton btnsortalphaasc, btnsortalphadesc;
     public JButton btnsortratingasc, btnsortratingdesc;
     public JButton btnratingsubmit, btntagsubmit;
-    public JComboBox<Vocable.Rating> comboboxrating;
+    public JComboBox<Vocable.Difficulty> comboboxrating;
     public JComboBox<String> comboboxtag;
     public JLabel lblsort, lblfilter;
     VocableDictionary dictionary;
@@ -165,7 +165,7 @@ public class studyInterface {
                 c1.gridx = 1;
                 c1.gridy = 3;
                 pane1.add(lblfilter, c1);
-                comboboxrating = new JComboBox<>(Vocable.Rating.values());
+                comboboxrating = new JComboBox<>(Vocable.Difficulty.values());
                 c1.gridx = 0;
                 c1.gridy = 4;
                 pane1.add(comboboxrating, c1);
@@ -174,7 +174,7 @@ public class studyInterface {
                 c1.gridy = 4;
                 btnratingsubmit.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        list.setModel(filterJlistByRating(list, Vocable.Rating.valueOf(comboboxrating.getSelectedItem().toString())));
+                        list.setModel(filterJlistByRating(list, Vocable.Difficulty.valueOf(comboboxrating.getSelectedItem().toString())));
 
                         frame2.setVisible(false);
                     }
@@ -339,7 +339,7 @@ public class studyInterface {
         else
             langList2.addAll(langList);
 
-        for (Vocable.Rating rating : Vocable.Rating.values())
+        for (Vocable.Difficulty rating : Vocable.Difficulty.values())
         {
             ArrayList<Vocable> tempList = dictionary.getVocablesByRating(rating, langList2);
 
@@ -374,7 +374,7 @@ public class studyInterface {
         else
             langList2.addAll(langList);
 
-        for (Vocable.Rating rating : Vocable.Rating.values())
+        for (Vocable.Difficulty rating : Vocable.Difficulty.values())
         {
             ArrayList<Vocable> tempList = dictionary.getVocablesByRating(rating, langList2);
 
@@ -389,7 +389,7 @@ public class studyInterface {
         return model;
     }
 
-    public DefaultListModel filterJlistByRating(JList list, Vocable.Rating selectedRating)
+    public DefaultListModel filterJlistByRating(JList list, Vocable.Difficulty selectedRating)
     {
         DefaultListModel<String> model
                 = new DefaultListModel<>();

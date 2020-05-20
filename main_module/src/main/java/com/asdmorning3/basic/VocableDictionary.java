@@ -302,24 +302,24 @@ public class VocableDictionary implements Serializable {
 		return  vocables;
 	}
 
-	public void changeVocableRating(Vocable.Rating rating, Vocable vocable)
+	public void changeVocableRating(Vocable.Difficulty rating, Vocable vocable)
 	{
-		vocable.changeRating(rating);
+		vocable.changeDifficulty(rating);
 	}
 
-	public Vocable.Rating getVocableRating(Vocable vocable)
+	public Vocable.Difficulty getVocableDifficulty(Vocable vocable)
 	{
-		return vocable.getRating();
+		return vocable.getDifficluty();
 	}
 
 	public ArrayList<Vocable> getVocablesSortedAsc(HashSet<Vocable> list)
 	{
 		ArrayList<Vocable> sortedVocables = new ArrayList<>();
-		for(Vocable.Rating rating : Vocable.Rating.values())
+		for(Vocable.Difficulty rating : Vocable.Difficulty.values())
 		{
 			for (Vocable vocable : list)
 			{
-				if(vocable.getRating().equals(rating))
+				if(vocable.getDifficluty().equals(rating))
 					sortedVocables.add(vocable);
 			}
 		}
@@ -330,11 +330,11 @@ public class VocableDictionary implements Serializable {
 	public ArrayList<Vocable> getVocablesSortedAsc(ArrayList<Vocable> list)
 	{
 		ArrayList<Vocable> sortedVocables = new ArrayList<>();
-		for(Vocable.Rating rating : Vocable.Rating.values())
+		for(Vocable.Difficulty rating : Vocable.Difficulty.values())
 		{
 			for (Vocable vocable : list)
 			{
-				if(vocable.getRating().equals(rating))
+				if(vocable.getDifficluty().equals(rating))
 					sortedVocables.add(vocable);
 			}
 		}
@@ -346,11 +346,11 @@ public class VocableDictionary implements Serializable {
 	{
 		ArrayList<Vocable> sortedVocables = new ArrayList<>();
 
-		for(int index = Vocable.Rating.values().length - 1; index >= 0; index--)
+		for(int index = Vocable.Difficulty.values().length - 1; index >= 0; index--)
 		{
 			for (Vocable vocable : list)
 			{
-				if(vocable.getRating().equals(Vocable.Rating.values()[index]))
+				if(vocable.getDifficluty().equals(Vocable.Difficulty.values()[index]))
 					sortedVocables.add(vocable);
 			}
 		}
@@ -362,11 +362,11 @@ public class VocableDictionary implements Serializable {
 	{
 		ArrayList<Vocable> sortedVocables = new ArrayList<>();
 
-		for(int index = Vocable.Rating.values().length - 1; index >= 0; index--)
+		for(int index = Vocable.Difficulty.values().length - 1; index >= 0; index--)
 		{
 			for (Vocable vocable : list)
 			{
-				if(vocable.getRating().equals(Vocable.Rating.values()[index]))
+				if(vocable.getDifficluty().equals(Vocable.Difficulty.values()[index]))
 					sortedVocables.add(vocable);
 			}
 		}
@@ -374,23 +374,23 @@ public class VocableDictionary implements Serializable {
 		return  sortedVocables;
 	}
 
-	public ArrayList<Vocable> getVocablesByRating(Vocable.Rating rating, HashSet<Vocable> list)
+	public ArrayList<Vocable> getVocablesByRating(Vocable.Difficulty rating, HashSet<Vocable> list)
 	{
 		ArrayList<Vocable> vocables = new ArrayList<>();
 		for (Vocable vocable : list)
 		{
-			if(vocable.getRating().equals(rating))
+			if(vocable.getDifficluty().equals(rating))
 				vocables.add(vocable);
 		}
 		return  vocables;
 	}
 
-	public ArrayList<Vocable> getVocablesByRating(Vocable.Rating rating, ArrayList<Vocable> list)
+	public ArrayList<Vocable> getVocablesByRating(Vocable.Difficulty rating, ArrayList<Vocable> list)
 	{
 		ArrayList<Vocable> vocables = new ArrayList<>();
 		for (Vocable vocable : list)
 		{
-			if(vocable.getRating().equals(rating))
+			if(vocable.getDifficluty().equals(rating))
 				vocables.add(vocable);
 		}
 		return  vocables;
