@@ -115,22 +115,34 @@ public class VocableOverview {
 		item_.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				if (table_.getSelectedColumn() == table_.getColumnCount() -1)
-				{
+				if (table_.getSelectedColumn() == table_.getColumnCount() - 1) {
 					return;
 				}
-				if(!data_[table_.getSelectedRow()][table_.getSelectedColumn()].equals("")){
-					Vocable v = dict_.findVocable(data_[table_.getSelectedRow()][table_.getSelectedColumn()],
+				Vocable v = null;
+				if (!data_[table_.getSelectedRow()][table_.getSelectedColumn()].equals("")) {
+					v = dict_.findVocable(data_[table_.getSelectedRow()][table_.getSelectedColumn()],
 							Vocable.Language.class.getEnumConstants()[table_.getSelectedColumn()]).get(0);
-					Edit e = new Edit(frame_, dict_, v, interfaceLanguage_);
-					dict_ = e.edit();
-					String[] newData = dict_.getTable(languages, interfaceLanguage_)[table_.getSelectedRow()];
-					for(int c = 0; c < Vocable.Language.class.getEnumConstants().length; c++) {
-						table_.setValueAt(newData[c], table_.getSelectedRow(), c);
-						data_[table_.getSelectedRow()][c] = newData[c];
+
+				} else {
+					for(int i = 0; i < table_.getColumnCount() - 1; i++){
+						if(data_[table_.getSelectedRow()][i].equals(""))
+							continue;
+						v = dict_.findVocable(data_[table_.getSelectedRow()][i],
+								Vocable.Language.class.getEnumConstants()[i]).get(0);
+						break;
 					}
-					assert((String[])data_[table_.getSelectedRow()] == newData);
+					if(v == null)
+						return;
 				}
+				Edit e = new Edit(frame_, dict_, v, interfaceLanguage_);
+				dict_ = e.edit();
+				String[] newData = dict_.getTable(languages, interfaceLanguage_)[table_.getSelectedRow()];
+				for (int c = 0; c < Vocable.Language.class.getEnumConstants().length; c++) {
+					table_.setValueAt(newData[c], table_.getSelectedRow(), c);
+					data_[table_.getSelectedRow()][c] = newData[c];
+					data_[table_.getSelectedRow()][c] = newData[c];
+				}
+				assert ((String[]) data_[table_.getSelectedRow()] == newData);
 			}
 		});
 

@@ -149,20 +149,13 @@ public class VocableDictionary implements Serializable {
 		{
 			i.editTranslation(lang, new_vocab);
 			return i;
-			/*assert(i.getTranslation(lang).getWord() == new_vocab);
-			for(Vocable.Language l : Vocable.Language.values())
-			{
-				if(l != lang)
-				{
-					try {
-						i.getTranslation(l).editTranslation(lang, new_vocab);
-					}
-					catch(NullPointerException ex) {}
-				}
-			}
-			return i;*/
 		}
 		return null;
+	}
+
+	public void replace(Vocable old_vocab, String new_vocab, Vocable.Language lang)
+	{
+		old_vocab.editTranslation(lang, new_vocab);
 	}
 
 	public List<Vocable> getAllFromLanguage(Vocable.Language lang)
@@ -232,6 +225,23 @@ public class VocableDictionary implements Serializable {
 			list.add(voc1);
 		}
 		vocableList.addAll(Arrays.asList(vocables));
+	}
+
+	public void addTranslation(Vocable new_vocab, Vocable ger_translation){
+		if(new_vocab.getLanguage() == ger_translation.getLanguage()){
+			replace(ger_translation.getWord(), new_vocab.getWord(), Vocable.Language.GER);
+			return;
+		}
+		addVocable(new_vocab);
+		ger_translation.addTranslation(new_vocab);
+		for(Vocable.Language lang : Vocable.Language.class.getEnumConstants()){
+			if(lang != new_vocab.getLanguage() && lang != ger_translation.getLanguage()) {
+				//System.out.println(vocable.getLanguage().toString() + " != " + lang.toString());
+				ger_translation.getTranslation(lang).
+						addTranslation(new_vocab);
+			}
+		}
+
 	}
 
 	public Tags createTag(String description, Color color)
