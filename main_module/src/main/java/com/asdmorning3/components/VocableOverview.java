@@ -29,12 +29,18 @@ public class VocableOverview {
 	private JMenuItem item_;
 	private VocableDictionary dict_;
 
-	public void changeLanguage(InterfaceLanguages.Languages interfaceLanguage) {
+	public void setIntLang(InterfaceLanguages.Languages interfaceLanguage) {
 		if (interfaceLanguage == interfaceLanguage_)
 			return;
 		this.interfaceLanguage_ = interfaceLanguage;
 		frame_.setName(languages.getString(interfaceLanguage_, "overview"));
 		item_.setText(languages.getString(interfaceLanguage_, "edit"));
+		int i = 0;
+		for (Vocable.Language language: Vocable.Language.class.getEnumConstants())
+		{
+			table_.getColumnModel().getColumn(i++).setHeaderValue(languages.getString(interfaceLanguage, Vocable.getLanguageWord(language)));
+		}
+		table_.getColumnModel().getColumn(i).setHeaderValue(languages.getString(interfaceLanguage, "difficulty"));
 	}
 
 	public VocableOverview(VocableDictionary dict, InterfaceLanguages.Languages interfaceLanguage)
@@ -47,20 +53,18 @@ public class VocableOverview {
 		item_ = new JMenuItem();
 		item_.setText(languages.getString(interfaceLanguage, "edit"));
 		dict_ = dict;
-		changeLanguage(interfaceLanguage);
+		String data_[][] = dict.getTable(languages, interfaceLanguage_);
 		int i = 0;
 		for (Vocable.Language language: Vocable.Language.class.getEnumConstants())
 		{
-			columns_[i] = Vocable.getLanguageWord(language);
-			i++;
+			columns_[i++] = languages.getString(interfaceLanguage, Vocable.getLanguageWord(language));
 		}
-		columns_[i] = "Difficulty";
+		columns_[i] = languages.getString(interfaceLanguage, "difficulty");
 
-
-		String data_[][] = dict.getTable(languages, interfaceLanguage_);
 		CustomTableModel customTableModel = new CustomTableModel(data_, columns_);
-
 		table_ = new JTable(customTableModel);
+		table_.getTableHeader().setReorderingAllowed(false);
+		setIntLang(interfaceLanguage);
 
 		table_.addMouseListener(new MouseListener() {
 			@Override
@@ -193,5 +197,4 @@ public class VocableOverview {
 			return true;
 		}
 	}
-
 }

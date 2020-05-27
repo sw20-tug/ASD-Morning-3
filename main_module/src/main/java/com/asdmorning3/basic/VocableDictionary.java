@@ -232,7 +232,7 @@ public class VocableDictionary implements Serializable {
 			replace(ger_translation.getWord(), new_vocab.getWord(), Vocable.Language.GER);
 			return;
 		}
-		addVocable(new_vocab);
+		vocableList.add(new_vocab);
 		ger_translation.addTranslation(new_vocab);
 		for(Vocable.Language lang : Vocable.Language.class.getEnumConstants()){
 			if(lang != new_vocab.getLanguage() && lang != ger_translation.getLanguage()) {

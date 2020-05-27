@@ -216,6 +216,9 @@ public class GUI {
                 public void actionPerformed(ActionEvent actionEvent) {
                     lang = itemLangs.get(temp);
                     setIntLang(lang);
+                    overview.setIntLang(lang);
+                    study.setIntLang(lang);
+                    test.setIntLang(lang);
                 }
             });
             itemLangs.put(temp, i);
