@@ -440,6 +440,7 @@ public class VocableDictionary implements Serializable {
 
 	public String changeDifficulty(List<String> row_strings, boolean decrease) {
 		ArrayList<List<Vocable>> arrays = new ArrayList<>(row_strings.size());
+		System.out.println("changing difficulty for :" + row_strings.get(0) + "//" + row_strings.get(1) + "//" + row_strings.get(2));
 		int i = 0;
 		int array_position = 0;
 		for (String s : row_strings)
@@ -450,8 +451,10 @@ public class VocableDictionary implements Serializable {
 			i++;
 		}
 		String difficulty = Vocable.Difficulty.MEDIUM.toString();
+		int matches;
 		for (int k = 0; k < arrays.get(array_position).size(); k++)
 		{
+			matches = 0;
 			if (arrays.get(array_position).get(k).getWord().equals(row_strings.get(array_position)))
 			{
 				for (int j = 1; j < Vocable.Language.class.getEnumConstants().length; j++)
@@ -460,14 +463,57 @@ public class VocableDictionary implements Serializable {
 					if (arrays.get(array_position).get(k).getWord(Vocable.Language.class.getEnumConstants()[j])
 							.equals(row_strings.get(j)))
 					{
-						if(!decrease)
-							arrays.get(array_position).get(k).increaseDifficulty();
-						else
-							arrays.get(array_position).get(k).decreaseDifficulty();
-						difficulty = arrays.get(array_position).get(k).getDifficultyString();
-						break;
+						matches++;
+
 					}
 				}
+			}
+			if (matches == Vocable.Language.class.getEnumConstants().length - 1)
+			{
+				if(!decrease)
+					arrays.get(array_position).get(k).increaseDifficulty();
+				else
+					arrays.get(array_position).get(k).decreaseDifficulty();
+				difficulty = arrays.get(array_position).get(k).getDifficultyString();
+				break;
+			}
+		}
+		return difficulty;
+	}
+
+	public String getDifficulty(List<String> row_strings) {
+		ArrayList<List<Vocable>> arrays = new ArrayList<>(row_strings.size());
+		int i = 0;
+		int array_position = 0;
+		for (String s : row_strings)
+		{
+			arrays.add(i, findVocable(s, Vocable.Language.class.getEnumConstants()[i]));
+			if(Vocable.Language.class.getEnumConstants()[i] == Vocable.Language.GER)
+				array_position = i;
+			i++;
+		}
+		String difficulty = Vocable.Difficulty.MEDIUM.toString();
+		int matches;
+		for (int k = 0; k < arrays.get(array_position).size(); k++)
+		{
+			matches = 0;
+			if (arrays.get(array_position).get(k).getWord().equals(row_strings.get(array_position)))
+			{
+				for (int j = 1; j < Vocable.Language.class.getEnumConstants().length; j++)
+				{
+
+					if (arrays.get(array_position).get(k).getWord(Vocable.Language.class.getEnumConstants()[j])
+							.equals(row_strings.get(j)))
+					{
+						matches++;
+
+					}
+				}
+			}
+			if (matches == Vocable.Language.class.getEnumConstants().length - 1)
+			{
+				difficulty = arrays.get(array_position).get(k).getDifficultyString();
+				break;
 			}
 		}
 		return difficulty;
