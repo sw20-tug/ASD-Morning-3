@@ -1,9 +1,8 @@
 package com.asdmorning3.test;
 
-import com.asdmorning3.basic.GUI;
+import com.asdmorning3.basic.Tags;
 import com.asdmorning3.basic.Vocable;
 import com.asdmorning3.basic.VocableDictionary;
-import com.asdmorning3.basic.Tags;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -11,11 +10,9 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Objects;
 
 public class TestVocabulary {
     static JFrame frame;
@@ -282,10 +279,10 @@ public class TestVocabulary {
                         ti.guessedLastVocable(true);
 
                         Vocable nextVocable = ti.getNextVocable();
-                        if(ti.test_finished)
+                        if(ti.getTestFinished())
                         {
-                            ti.showStats();
                             frame2.dispose();
+                            showResults(ti, lang);
                             return;
                         }
 
@@ -300,10 +297,10 @@ public class TestVocabulary {
                 button_wrong.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         ti.guessedLastVocable(false);
-                        if(ti.test_finished)
+                        if(ti.getTestFinished())
                         {
-                            ti.showStats();
                             frame2.dispose();
+                            showResults(ti, lang);
                             return;
                         }
                         Vocable nextVocable = ti.getNextVocable();
@@ -404,6 +401,79 @@ public class TestVocabulary {
     public Component getContent()
     {
         return frame.getContentPane();
+    }
+
+    public void showResults(TestEntity ti, InterfaceLanguages.Languages lang)
+    {
+        ArrayList<String> results = new ArrayList<>();
+        results = ti.showStats();
+        JFrame frame3 = new JFrame("Test results");
+        JPanel pane = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+
+        JLabel accuracy = new JLabel();
+        JLabel vocable_guessed = new JLabel();
+        JLabel vocable_guessed_first_try = new JLabel();
+        JLabel vocable_wrong = new JLabel();
+        JLabel average_tries = new JLabel();
+        JLabel learn_again = new JLabel();
+        JTextArea worst_vocables = new JTextArea(2, 20);
+
+        frame3.setSize(300, 500);
+
+        accuracy.setText(languages.getString(lang, "accuracy") + " " + results.get(0) + "%");
+        vocable_guessed.setText(languages.getString(lang, "guessed") + " " + results.get(1));
+        vocable_guessed_first_try.setText(languages.getString(lang, "guessedfirst") + " " + results.get(2));
+        vocable_wrong.setText(languages.getString(lang, "notguessed") + " " + results.get(3));
+        average_tries.setText(languages.getString(lang, "averagetries") + " " + results.get(4));
+        learn_again.setText(languages.getString(lang, "worstvocabs"));
+        worst_vocables.setText(results.get(5));
+
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 2;
+        c.insets = new Insets(10, 0, 10, 0);
+        pane.add(accuracy, c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 2;
+        pane.add(vocable_guessed, c);
+
+        c.gridx = 0;
+        c.gridy = 2;
+        c.gridwidth = 2;
+        pane.add(vocable_guessed_first_try, c);
+
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 2;
+        pane.add(vocable_wrong, c);
+
+        c.gridx = 0;
+        c.gridy = 4;
+        c.gridwidth = 2;
+        pane.add(average_tries, c);
+
+        c.gridx = 0;
+        c.gridy = 5;
+        c.gridwidth = 2;
+        pane.add(learn_again, c);
+
+        c.gridx = 0;
+        c.gridy = 6;
+        c.gridwidth = 2;
+        c.insets = new Insets(0, 0, 0, 0);
+        worst_vocables.setFont(UIManager.getFont("Label.font"));
+        worst_vocables.setBorder(UIManager.getBorder("Label.border"));
+        worst_vocables.setBackground(frame3.getBackground());
+        worst_vocables.setWrapStyleWord(true);
+        worst_vocables.setLineWrap(true);
+        worst_vocables.setEditable(false);
+        pane.add(worst_vocables, c);
+
+        frame3.add(pane);
+        frame3.setVisible(true);
     }
 }
 
