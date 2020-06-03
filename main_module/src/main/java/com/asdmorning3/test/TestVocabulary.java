@@ -118,7 +118,7 @@ public class TestVocabulary {
         c.gridheight = 5;
         list_test = new JList();
         JScrollPane scroll_test = new JScrollPane(list_test);
-        scroll_test.setPreferredSize(new Dimension(235, 170));
+        scroll_test.setPreferredSize(new Dimension(200, 150));
         pane.add(scroll_test, c);
         c.insets = new Insets(10, 0, 10, 0);
         c.gridheight = 1;
