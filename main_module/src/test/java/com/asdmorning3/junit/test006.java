@@ -43,7 +43,7 @@ public class test006 {
 		dictionary.addVocable(v8, v9);
 		dictionary.addVocable(v10, v11);
 		dictionary.addVocable(v12, v13);
-		overview = new VocableOverview(dictionary, InterfaceLanguages.Languages.DE);
+		//overview = new VocableOverview(dictionary, InterfaceLanguages.Languages.DE, );
 		assert(overview.getContent().getComponents().length > 0);
 	}
 
@@ -85,7 +85,7 @@ public class test006 {
 			difficulty = overview.dict_.changeDifficulty(row_strings, false);
 			overview.updateDifficulty(row, difficulty);
 		}
-		overview.changeLanguage(InterfaceLanguages.Languages.FR);
+		overview.setIntLang(InterfaceLanguages.Languages.FR);
 		for (int i = 0; i < rows; i++)
 		{
 			System.out.println((String)((JTable)overview.getContent().getViewport().getComponent(0)).getValueAt(i, 3)  + ":\t"+ overview.table_.getValueAt(i, 0) + "/" + overview.table_.getValueAt(i, 1) + "/" + overview.table_.getValueAt(i, 2));

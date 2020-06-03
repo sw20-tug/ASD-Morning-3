@@ -71,7 +71,7 @@ public class GUI {
         txtFld2 = new JTextField();
         lblLang1 = new JLabel();
         lang = (InterfaceLanguages.Languages) InterfaceLanguages.Languages.DE;
-        overview = new VocableOverview(vcb, lang);
+        overview = new VocableOverview(vcb, lang, this);
         study = new studyInterface(vcb, lang);
         test = new TestVocabulary(vcb, lang);
         frame = new JFrame();
@@ -281,15 +281,18 @@ public class GUI {
         tabbedPane.setTitleAt(1, languages.getString(lang, "overview"));
         tabbedPane.setTitleAt(2, languages.getString(lang, "study"));
         tabbedPane.setTitleAt(3, languages.getString(lang, "test"));
-        overview.changeLanguage(lang);
     }
 
     private void refreshTabs()
     {
         Component component;
-        overview = new VocableOverview(vcb, lang);
+        overview = new VocableOverview(vcb, lang, this);
         study = new studyInterface(vcb, lang);
         tabbedPane.setComponentAt(1, overview.getContent());
         tabbedPane.setComponentAt(2, study.getContent());
+    }
+
+    public void update(VocableDictionary best){
+        test.updateDict(best);
     }
 }

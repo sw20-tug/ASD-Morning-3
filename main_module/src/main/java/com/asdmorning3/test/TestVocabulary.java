@@ -29,7 +29,7 @@ public class TestVocabulary {
     public JButton button_remove_all = new JButton();
     public JComboBox<Vocable.Language> comboBoxFromLang;
     public JComboBox<Vocable.Language> comboBoxToLang;
-    public JComboBox<Tags> comboBoxTags;
+    public JComboBox<String> comboBoxTags;
     public JComboBox<String> comboBoxRating;
     public JTextField txtNumber = new JTextField();
     VocableDictionary dictionary;
@@ -43,6 +43,7 @@ public class TestVocabulary {
     private java.util.List<Vocable> vocableList;
 
     public TestVocabulary(VocableDictionary dictionary_, InterfaceLanguages.Languages lang) {
+        String select_all = "ALL";
         languages = new InterfaceLanguages();
         dictionary = dictionary_;
         interface_languages = lang;
@@ -60,7 +61,14 @@ public class TestVocabulary {
         comboBoxFromLang = new JComboBox(new DefaultComboBoxModel<String>(languages.toArray(new String[0])));
         comboBoxToLang = new JComboBox(new DefaultComboBoxModel<String>(languages.toArray(new String[0])));
         comboBoxTags = new JComboBox(dictionary.getTagsString().toArray(new String[0]));
-        comboBoxRating = new JComboBox();
+        comboBoxTags.addItem(select_all);
+
+        comboBoxRating = new JComboBox(Vocable.Difficulty.values());
+        comboBoxRating.addItem(select_all);
+
+        comboBoxFromLang.setSelectedIndex(0);
+        comboBoxToLang.setSelectedIndex(1);
+
         final JComboBox setAnotherLanguage;
 
         frame.setSize(600, 600);
@@ -99,11 +107,13 @@ public class TestVocabulary {
         c.gridy = 2;
         pane.add(lblTestList, c);
 
+        c.insets = new Insets(0, 0, 0, 0);
         c.gridx = 0;
         c.gridy = 3;
         c.gridheight = 5;
         list_vocabs = new JList();
         JScrollPane scroll_vocabs = new JScrollPane(list_vocabs);
+        scroll_vocabs.setPreferredSize(new Dimension(235, 170));
         pane.add(scroll_vocabs, c);
 
         c.gridx = 2;
@@ -111,8 +121,9 @@ public class TestVocabulary {
         c.gridheight = 5;
         list_test = new JList();
         JScrollPane scroll_test = new JScrollPane(list_test);
+        scroll_test.setPreferredSize(new Dimension(235, 170));
         pane.add(scroll_test, c);
-
+        c.insets = new Insets(10, 0, 10, 0);
         c.gridheight = 1;
         c.gridx = 0;
         c.gridy = 9;
@@ -145,8 +156,34 @@ public class TestVocabulary {
                 Object obj2 = comboBoxToLang.getSelectedItem();
                 String secondCurrentLanguage = String.valueOf(obj2);
 
+                String rating = comboBoxRating.getSelectedItem().toString();
+                String tags = comboBoxTags.getSelectedItem().toString();
+
                 if (currentLanguage != secondCurrentLanguage) {
-                    vocab_array = new ArrayList<Vocable>(dictionary.getAllFromLanguage(language_list.get(currentLanguage)));
+                    ArrayList<Vocable> vocabs_all = new ArrayList<>(dictionary.getAllFromLanguage(language_list.get(currentLanguage)));
+                    vocab_array = new ArrayList<>();
+                    for(Vocable v : vocabs_all){
+                        if(v.getLanguage() != Vocable.Language.GER)
+                            v = v.getTranslation(Vocable.Language.GER);
+                        //rating
+                        if(!rating.equals(select_all)){
+                            if(!v.getDifficultyString().toUpperCase().equals(rating)) {
+                                continue;
+                            }
+                        }
+                        //tags
+                        if(!tags.equals(select_all)){
+                            for(Tags t : v.getTags()){
+                                if(t.getDescription().equals(tags)){
+                                    vocab_array.add(v);
+                                    continue;
+                                }
+                            }
+                        }
+                        else{
+                            vocab_array.add(v);
+                        }
+                    }
                     int size = vocab_array.size();
                     String[] words = new String[size];
                     for (int counter = 0; counter < vocab_array.size(); counter++) {
@@ -357,11 +394,6 @@ public class TestVocabulary {
             }
 
         });
-
-
-
-
-
         setIntLang(lang);
 
     }
@@ -474,6 +506,17 @@ public class TestVocabulary {
 
         frame3.add(pane);
         frame3.setVisible(true);
+    }
+
+    public void updateDict(VocableDictionary newx){
+        dictionary = newx;
+        comboBoxTags.removeAllItems();
+        comboBoxTags.addItem("ALL");
+        for(String s : dictionary.getTagsString()){
+            comboBoxTags.addItem(s);
+        }
+
+        System.out.println("updated TEST");
     }
 }
 
