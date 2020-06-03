@@ -35,7 +35,6 @@ public class TestVocabulary {
     VocableDictionary dictionary;
     InterfaceLanguages.Languages interface_languages;
     InterfaceLanguages languages;
-    //JTextField t1;
     HashMap<String, Vocable.Language> language_list = new HashMap();
     ArrayList<Vocable> vocab_array = new ArrayList<>();
     ArrayList<Vocable> test_array = new ArrayList<>();
@@ -73,8 +72,6 @@ public class TestVocabulary {
         c.gridy = 0;
         pane.add(comboBoxRating, c);
 
-        //c.anchor = GridBagConstraints.FIRST_LINE_START;
-
         c.gridx = 2;
         c.gridy = 0;
         pane.add(button_show, c);
@@ -104,6 +101,7 @@ public class TestVocabulary {
         c.gridheight = 5;
         list_vocabs = new JList();
         JScrollPane scroll_vocabs = new JScrollPane(list_vocabs);
+        scroll_vocabs.setPreferredSize(new Dimension(200, 150));
         pane.add(scroll_vocabs, c);
 
         c.gridx = 2;
@@ -111,6 +109,7 @@ public class TestVocabulary {
         c.gridheight = 5;
         list_test = new JList();
         JScrollPane scroll_test = new JScrollPane(list_test);
+        scroll_test.setPreferredSize(new Dimension(200, 150));
         pane.add(scroll_test, c);
 
         c.gridheight = 1;
@@ -134,7 +133,6 @@ public class TestVocabulary {
         c.gridx = 2;
         c.gridy = 11;
         pane.add(button_start, c);
-
 
         frame.add(pane);
         button_show.addActionListener(new ActionListener() {
@@ -160,7 +158,6 @@ public class TestVocabulary {
                             "WARNING",
                             JOptionPane.WARNING_MESSAGE);
             }
-
         });
 
         button_add_all.addActionListener(new ActionListener() {
@@ -205,9 +202,9 @@ public class TestVocabulary {
                 InterfaceLanguages languages;
                 languages = new InterfaceLanguages();
 
-                button_show.setText(languages.getString(lang, "show"));
-                button_right.setText(languages.getString(lang, "right"));
-                button_wrong.setText(languages.getString(lang, "wrong"));
+                button_show.setText(languages.getString(interface_languages, "show"));
+                button_right.setText(languages.getString(interface_languages, "right"));
+                button_wrong.setText(languages.getString(interface_languages, "wrong"));
 
                 frame2.setSize(300, 500);
 
@@ -282,15 +279,13 @@ public class TestVocabulary {
                         if(ti.getTestFinished())
                         {
                             frame2.dispose();
-                            showResults(ti, lang);
+                            showResults(ti, interface_languages);
                             return;
                         }
 
                         vocable_field.setText(nextVocable.getWord(from));
                         translation_field.setText(nextVocable.getWord(to));
                         translation_field.setForeground(translation_field.getBackground());
-
-
                     }
                 });
 
@@ -300,7 +295,7 @@ public class TestVocabulary {
                         if(ti.getTestFinished())
                         {
                             frame2.dispose();
-                            showResults(ti, lang);
+                            showResults(ti, interface_languages);
                             return;
                         }
                         Vocable nextVocable = ti.getNextVocable();
@@ -310,9 +305,6 @@ public class TestVocabulary {
 
                     }
                 });
-
-
-
             }
         });
 
@@ -339,8 +331,6 @@ public class TestVocabulary {
 
         });
 
-
-
         list_test.addListSelectionListener(new ListSelectionListener() {
 
             public void valueChanged(ListSelectionEvent event) {
@@ -357,13 +347,7 @@ public class TestVocabulary {
             }
 
         });
-
-
-
-
-
         setIntLang(lang);
-
     }
 
     public void setIntLang(InterfaceLanguages.Languages lang) {
@@ -376,6 +360,7 @@ public class TestVocabulary {
         button_show.setText(languages.getString(lang, "show"));
         button_add_all.setText(languages.getString(lang, "addall"));
         button_remove_all.setText(languages.getString(lang, "removeall"));
+        interface_languages = lang;
     }
 
     public void printTestVocabs()
