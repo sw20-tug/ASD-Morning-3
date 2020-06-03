@@ -276,4 +276,21 @@ public class Vocable implements Serializable {
 		return this.rating_;
 	}
 
+	public static boolean isHumanReadable(String word)
+	{
+		if (word == null)
+		{
+			return false;
+		}
+		boolean has_character = false;
+		for (int i = 0; i < word.length(); i++)
+		{
+			if((word.charAt(i) >= 0x21 && word.charAt(i) <= 0x7e) ||
+					(word.charAt(i) >= 0xA1))
+			{
+				has_character = true;
+			}
+		}
+		return has_character;
+	}
 }

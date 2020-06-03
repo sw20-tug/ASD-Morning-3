@@ -89,6 +89,44 @@ public class VocableDictionary implements Serializable {
 		return table;
 	}
 
+	public String[][] getTable(InterfaceLanguages interfaceLanguage, InterfaceLanguages.Languages languages, Vocable.Language sortByLanguage, boolean sortAsc, boolean sortByRating) //TODO
+	{
+		ArrayList<Vocable> sortedVocables = null;
+
+		if(sortByRating)
+		{
+			//sort by rating
+			if(sortAsc)
+				sortedVocables = getVocablesSortedAsc(vocableList);
+			else
+				sortedVocables = getVocablesSortedDesc(vocableList);
+		}
+		else
+		{
+			//sort by language
+			if(sortAsc)
+				sortedVocables = sortVocablesByAlhpabetAsc(vocableList, sortByLanguage);
+			else
+				sortedVocables = sortVocablesByAlhpabetDesc(vocableList, sortByLanguage);
+		}
+
+
+
+		String[][] table = new String[sortedVocables.size()][Vocable.Language.class.getEnumConstants().length + 1];
+		int row = 0;
+		int col = 0;
+		for (Vocable vocab : sortedVocables) {
+			col = 0;
+			for (Vocable.Language language : Vocable.Language.class.getEnumConstants()) {
+				table[row][col] = vocab.getWord(language);
+				col++;
+			}
+			table[row][col] = interfaceLanguage.getString(languages, vocab.getDifficultyString());
+			row++;
+		}
+		return table;
+	}
+
 	public String[][] getTable(ArrayList<Vocable> vocables)
 	{
 		String[][] table = new String[findVocable(Vocable.Language.GER).size()][Vocable.Language.class.getEnumConstants().length];
@@ -325,9 +363,18 @@ public class VocableDictionary implements Serializable {
 	public ArrayList<Vocable> getVocablesSortedAsc(HashSet<Vocable> list)
 	{
 		ArrayList<Vocable> sortedVocables = new ArrayList<>();
+
+		ArrayList<Vocable> vocList = new ArrayList<>();
+
+		for (Vocable vocable : list)
+		{
+			if(vocable.getLanguage() == Vocable.Language.GER)
+				vocList.add(vocable);
+		}
+
 		for(Vocable.Difficulty rating : Vocable.Difficulty.values())
 		{
-			for (Vocable vocable : list)
+			for (Vocable vocable : vocList)
 			{
 				if(vocable.getDifficluty().equals(rating))
 					sortedVocables.add(vocable);
@@ -356,9 +403,17 @@ public class VocableDictionary implements Serializable {
 	{
 		ArrayList<Vocable> sortedVocables = new ArrayList<>();
 
+		ArrayList<Vocable> vocList = new ArrayList<>();
+
+		for (Vocable vocable : list)
+		{
+			if(vocable.getLanguage() == Vocable.Language.GER)
+				vocList.add(vocable);
+		}
+
 		for(int index = Vocable.Difficulty.values().length - 1; index >= 0; index--)
 		{
-			for (Vocable vocable : list)
+			for (Vocable vocable : vocList)
 			{
 				if(vocable.getDifficluty().equals(Vocable.Difficulty.values()[index]))
 					sortedVocables.add(vocable);
@@ -442,6 +497,64 @@ public class VocableDictionary implements Serializable {
 		for (Vocable vocable : list)
 		{
 			if(vocable.getWord(Vocable.Language.ENG).isEmpty())
+				sortedVocables.add(vocable);
+		}
+
+		return  sortedVocables;
+	}
+
+	public ArrayList<Vocable> sortVocablesByAlhpabetAsc(HashSet<Vocable> list, Vocable.Language sortBylanguage)
+	{
+		ArrayList<Vocable> sortedVocables = new ArrayList<>();
+
+		ArrayList<Vocable> vocList = new ArrayList<>();
+
+		for (Vocable vocable : list)
+		{
+			if(vocable.getLanguage() == Vocable.Language.GER)
+				vocList.add(vocable);
+		}
+
+		for(char alphabet = 'a'; alphabet <='z'; alphabet++ )
+		{
+			for (Vocable vocable : vocList)
+			{
+				if(vocable.getWord(sortBylanguage).charAt(0) == alphabet )
+					sortedVocables.add(vocable);
+			}
+		}
+		for (Vocable vocable : vocList)
+		{
+			if(vocable.getWord(sortBylanguage).isEmpty())
+				sortedVocables.add(vocable);
+		}
+
+		return  sortedVocables;
+	}
+
+	public ArrayList<Vocable> sortVocablesByAlhpabetDesc(HashSet<Vocable> list, Vocable.Language sortBylanguage)
+	{
+		ArrayList<Vocable> sortedVocables = new ArrayList<>();
+
+		ArrayList<Vocable> vocList = new ArrayList<>();
+
+		for (Vocable vocable : list)
+		{
+			if(vocable.getLanguage() == Vocable.Language.GER)
+				vocList.add(vocable);
+		}
+
+		for(char alphabet = 'z'; alphabet >= 'a'; alphabet-- )
+		{
+			for (Vocable vocable : vocList)
+			{
+				if(vocable.getWord(sortBylanguage).charAt(0) == alphabet )
+					sortedVocables.add(vocable);
+			}
+		}
+		for (Vocable vocable : vocList)
+		{
+			if(vocable.getWord(sortBylanguage).isEmpty())
 				sortedVocables.add(vocable);
 		}
 

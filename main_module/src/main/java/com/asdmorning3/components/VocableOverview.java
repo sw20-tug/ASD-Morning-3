@@ -79,6 +79,72 @@ public class VocableOverview {
 		table_ = new JTable(customTableModel);
 		table_.getTableHeader().setReorderingAllowed(false);
 		setIntLang(interfaceLanguage);
+		table_.getTableHeader().setReorderingAllowed(false);
+
+		// listener
+		table_.getTableHeader().addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent mouseEvent) {
+				int headerCol = table_.columnAtPoint(mouseEvent.getPoint());
+				String headerName = table_.getColumnModel().getColumn(headerCol).getHeaderValue().toString();
+
+				Vocable.Language sortByLanguage = null;
+				boolean sortAsc = true;
+				boolean sortByRating = false;
+
+				String HeaderUpdate;
+
+				int rating_col = Vocable.Language.class.getEnumConstants().length;
+				if(headerCol == rating_col)
+					sortByRating = true;
+				else
+					sortByLanguage= Vocable.Language.class.getEnumConstants()[headerCol];
+
+				if(headerName.contains(("▲")))
+				{
+					table_.getColumnModel().getColumn(headerCol).setHeaderValue(headerName.replace("▲", "▼"));
+					HeaderUpdate = table_.getColumnModel().getColumn(headerCol).getHeaderValue().toString();
+					sortAsc = false;
+				}
+				else if(headerName.contains(("▼")))
+				{
+					table_.getColumnModel().getColumn(headerCol).setHeaderValue(headerName.replace("▼", "▲"));
+					HeaderUpdate = table_.getColumnModel().getColumn(headerCol).getHeaderValue().toString();
+				}
+				else
+				{
+					table_.getColumnModel().getColumn(headerCol).setHeaderValue(headerName + " ▲");
+					HeaderUpdate = table_.getColumnModel().getColumn(headerCol).getHeaderValue().toString();
+				}
+
+				//sort: param for method: sortByLanguage, sortAsc, sortByRating
+				String[][] newData = dict_.getTable(languages, interfaceLanguage_, sortByLanguage, sortAsc, sortByRating);
+				CustomTableModel customTableModel = new CustomTableModel(newData, columns_);
+				table_.setModel(customTableModel);
+				table_.getColumnModel().getColumn(headerCol).setHeaderValue(HeaderUpdate);
+				//table_.getTableHeader().setReorderingAllowed(false);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent mouseEvent) {
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent mouseEvent) {
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent mouseEvent) {
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent mouseEvent) {
+
+			}
+		});
 
 		table_.addMouseListener(new MouseListener() {
 			@Override
@@ -228,4 +294,5 @@ public class VocableOverview {
 			return true;
 		}
 	}
+
 }
