@@ -22,6 +22,19 @@ public class Vocable implements Serializable {
 	}
 
 	public void increaseDifficulty() {
+		System.out.print("increasing difficulty for: ");
+		for (int i = 0; i < Language.class.getEnumConstants().length; i++)
+		{
+			try{
+				System.out.print("("+ Language.class.getEnumConstants()[i].toString() +"): " + getTranslation(Language.class.getEnumConstants()[i]).word_ + "//");
+			}
+			catch (IllegalArgumentException e)
+			{
+				System.out.print("("+ Language.class.getEnumConstants()[i].toString() +"): " + word_ + "//");
+			}
+			catch (Exception ignored){}
+		}
+		System.out.print("\n");
 		if(rating_ == Difficulty.EASY)
 			rating_ = Difficulty.MEDIUM;
 		else if(rating_ == Difficulty.MEDIUM)
@@ -31,6 +44,18 @@ public class Vocable implements Serializable {
 	}
 
 	public void decreaseDifficulty() {
+		System.out.print("decreasing difficulty for: ");
+		for (int i = 0; i < Language.class.getEnumConstants().length; i++)
+		{
+			try{
+				System.out.print("("+ Language.class.getEnumConstants()[i].toString() +"): " + getTranslation(Language.class.getEnumConstants()[i]).word_ + "//");
+			}
+			catch (IllegalArgumentException e)
+			{
+				System.out.print("("+ Language.class.getEnumConstants()[i].toString() +"): " + word_ + "//");
+			}
+			catch (Exception ignored){}
+		}
 		if(rating_ == Difficulty.HARD)
 			rating_ = Difficulty.MEDIUM;
 		else if(rating_ == Difficulty.MEDIUM)

@@ -18,7 +18,7 @@ public class VocableOverview {
 
 	private JFrame frame_;
 	private JScrollPane pane_;
-	private JTable table_;
+	public JTable table_;
 	private InterfaceLanguages.Languages interfaceLanguage_;
 	private ArrayList<List<Vocable>> vocable_list_;
 	private static int  WIDTH = 200;
@@ -27,7 +27,7 @@ public class VocableOverview {
 	private InterfaceLanguages languages;
 	private JPopupMenu popupMenu_;
 	private JMenuItem item_;
-	private VocableDictionary dict_;
+	public VocableDictionary dict_;
 
 	public void setIntLang(InterfaceLanguages.Languages interfaceLanguage) {
 		if (interfaceLanguage == interfaceLanguage_)
@@ -41,6 +41,17 @@ public class VocableOverview {
 			table_.getColumnModel().getColumn(i++).setHeaderValue(languages.getString(interfaceLanguage, Vocable.getLanguageWord(language)));
 		}
 		table_.getColumnModel().getColumn(i).setHeaderValue(languages.getString(interfaceLanguage, "difficulty"));
+		String value;
+		ArrayList<String> row_strings;
+		for (int row = 0; row < table_.getRowCount(); row++)
+		{
+			row_strings = new ArrayList<>(3);
+			for (int col = 0 ; col < 3; col++)
+			{
+				row_strings.add(col,(String)table_.getValueAt(row, col));
+			}
+			table_.setValueAt(languages.getString(interfaceLanguage,dict_.getDifficulty(row_strings)),row, 3);
+		}
 	}
 
 	public VocableOverview(VocableDictionary dict, InterfaceLanguages.Languages interfaceLanguage)
@@ -161,7 +172,9 @@ public class VocableOverview {
 	public void updateDifficulty(int row, String difficulty)
 	{
 		table_.setValueAt(languages.getString(interfaceLanguage_, difficulty), row, Vocable.Language.class.getEnumConstants().length);
+
 	}
+
 
 	public void changeVisibility(boolean visibility)
 	{

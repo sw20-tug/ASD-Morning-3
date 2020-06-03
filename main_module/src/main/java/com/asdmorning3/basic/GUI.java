@@ -281,6 +281,7 @@ public class GUI {
         tabbedPane.setTitleAt(1, languages.getString(lang, "overview"));
         tabbedPane.setTitleAt(2, languages.getString(lang, "study"));
         tabbedPane.setTitleAt(3, languages.getString(lang, "test"));
+        overview.changeLanguage(lang);
     }
 
     private void refreshTabs()

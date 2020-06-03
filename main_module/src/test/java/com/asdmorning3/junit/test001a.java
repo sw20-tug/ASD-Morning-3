@@ -17,6 +17,6 @@ public class test001a {
 		dictionary.addVocable(new Vocable("hallo", Vocable.Language.GER),
 				new Vocable("hello", Vocable.Language.ENG));
 		GUI g = new GUI(dictionary);
-		assert(g.comboBoxLang1.getItemCount() == 2);
+		assert(g.comboBoxLang1.getItemCount() == 3);
 	}
 }
