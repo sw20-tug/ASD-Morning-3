@@ -20,7 +20,6 @@ public class VocableOverview {
 	private JFrame frame_;
 	private JScrollPane pane_;
 	public JTable table_;
-	public JPanel paneMain_;
 	private InterfaceLanguages.Languages interfaceLanguage_;
 	private ArrayList<List<Vocable>> vocable_list_;
 	private static int  WIDTH = 200;
