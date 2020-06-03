@@ -3,8 +3,9 @@ package com.asdmorning3.junit;
 import com.asdmorning3.basic.GUI;
 import com.asdmorning3.basic.Vocable;
 import com.asdmorning3.basic.VocableDictionary;
+import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
 
 
 public class test001a {
