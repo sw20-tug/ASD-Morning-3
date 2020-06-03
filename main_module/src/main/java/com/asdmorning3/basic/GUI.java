@@ -143,9 +143,14 @@ public class GUI {
                     txtFld1.setText("");
                     txtFld2.setText("");
                 }
-                catch(NullPointerException ex)
+                catch(NullPointerException | IllegalArgumentException ex)
                 {
-                    System.out.println("(btnGUI)one of the objects is null");
+                    //System.out.println("(btnGUI)one of the objects is null");
+                    //System.out.println(ex.getMessage());
+                    JOptionPane.showMessageDialog(frame,
+                            translate(ex.getMessage()),
+                            "WARNING",
+                            JOptionPane.WARNING_MESSAGE);
                 }
                 refreshTabs();
             }
@@ -250,8 +255,10 @@ public class GUI {
                     System.out.println("(windowCloseGUI)one of the objects is null");
                 }
                 super.windowClosing(e);
+                System.exit(0);
             }
         });
+
         setIntLang(this.lang);
         frame.setVisible(true);
     }
@@ -263,6 +270,16 @@ public class GUI {
         d.addVocable(new Vocable("hallo", Vocable.Language.GER),
                 new Vocable("hello", Vocable.Language.ENG));
         GUI g = new GUI(d);
+    }
+
+    public String translate(String message)
+    {
+        if(lang == InterfaceLanguages.Languages.EN)
+            return message;
+        else if(lang == InterfaceLanguages.Languages.DE)
+            return "Das Wort muss mindestens eins sein.";
+        else
+            return "Le mot doit être au moins de longueur un.";
     }
 
     private void setIntLang(InterfaceLanguages.Languages lang)
