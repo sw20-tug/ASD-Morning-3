@@ -85,7 +85,7 @@ public class test006 {
 			difficulty = overview.dict_.changeDifficulty(row_strings, false);
 			overview.updateDifficulty(row, difficulty);
 		}
-		overview.changeLanguage(InterfaceLanguages.Languages.FR);
+		//overview.changeLanguage(InterfaceLanguages.Languages.FR);
 		for (int i = 0; i < rows; i++)
 		{
 			System.out.println((String)((JTable)overview.getContent().getViewport().getComponent(0)).getValueAt(i, 3)  + ":\t"+ overview.table_.getValueAt(i, 0) + "/" + overview.table_.getValueAt(i, 1) + "/" + overview.table_.getValueAt(i, 2));
