@@ -1,8 +1,6 @@
 package com.asdmorning3.components;
 
-import com.asdmorning3.basic.Edit;
-import com.asdmorning3.basic.Vocable;
-import com.asdmorning3.basic.VocableDictionary;
+import com.asdmorning3.basic.*;
 import com.asdmorning3.test.InterfaceLanguages;
 
 import javax.swing.*;
@@ -28,7 +26,9 @@ public class VocableOverview {
 	private InterfaceLanguages languages;
 	private JPopupMenu popupMenu_;
 	private JMenuItem item_;
+	private JMenuItem tags_;
 	public VocableDictionary dict_;
+	public GUI gui_;
 
 	public void setIntLang(InterfaceLanguages.Languages interfaceLanguage) {
 		if (interfaceLanguage == interfaceLanguage_)
@@ -55,14 +55,16 @@ public class VocableOverview {
 		}
 	}
 
-	public VocableOverview(VocableDictionary dict, InterfaceLanguages.Languages interfaceLanguage)
+	public VocableOverview(VocableDictionary dict, InterfaceLanguages.Languages interfaceLanguage, GUI parent)
 	{
+		gui_ = parent;
 		languages = new InterfaceLanguages();
 		interfaceLanguage_ = interfaceLanguage;
 		frame_ = new JFrame(languages.getString(interfaceLanguage, "overview"));
 		columns_ = new String[Vocable.Language.class.getEnumConstants().length + 1];
 		popupMenu_ = new JPopupMenu();
 		item_ = new JMenuItem();
+		tags_ = new JMenuItem("Tag");
 		item_.setText(languages.getString(interfaceLanguage, "edit"));
 		dict_ = dict;
 		String data_[][] = dict.getTable(languages, interfaceLanguage_);
@@ -193,6 +195,19 @@ public class VocableOverview {
 
 			}
 		});
+		tags_.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				String tag = JOptionPane.showInputDialog("Please enter the Tag!");
+				Vocable v = dict_.findVocable(data_[table_.getSelectedRow()][table_.getSelectedColumn()],
+						Vocable.Language.class.getEnumConstants()[table_.getSelectedColumn()]).get(0);
+				v = v.getLanguage() == Vocable.Language.GER ? v : v.getTranslation(Vocable.Language.GER);
+				assert(v.getLanguage() == Vocable.Language.GER);
+				Tags t = dict_.createTag(tag, Color.CYAN);
+				v.addTag(t);
+				gui_.update(dict_);
+			}
+		});
 
 		item_.addActionListener(new ActionListener() {
 			@Override
@@ -225,6 +240,7 @@ public class VocableOverview {
 					data_[table_.getSelectedRow()][c] = newData[c];
 				}
 				assert ((String[]) data_[table_.getSelectedRow()] == newData);
+				gui_.update(dict_);
 			}
 		});
 
@@ -232,6 +248,7 @@ public class VocableOverview {
 		frame_.setSize(Vocable.Language.class.getEnumConstants().length * WIDTH, 400);
 		frame_.add(pane_);
 		popupMenu_.add(item_);
+		popupMenu_.add(tags_);
 		table_.setComponentPopupMenu(popupMenu_);
 		changeVisibility(false);
 	}
