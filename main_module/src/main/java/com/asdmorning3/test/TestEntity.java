@@ -22,7 +22,7 @@ public class TestEntity {
     boolean test_finished;
     int number_of_vocabs;
 
-    TestEntity(ArrayList<Vocable> test_array, int number_of_reps,
+    public TestEntity(ArrayList<Vocable> test_array, int number_of_reps,
                Vocable.Language from_language, Vocable.Language to_language)
     {
         this.test_array = test_array;
@@ -127,14 +127,6 @@ public class TestEntity {
             results.add(tmp_worst);
         }
 
-
-
-
-
-
-
-
         return results;
     }
-
 }
