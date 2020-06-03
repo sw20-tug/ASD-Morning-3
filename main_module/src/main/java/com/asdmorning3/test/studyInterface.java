@@ -44,6 +44,14 @@ public class studyInterface {
 
     public studyInterface(VocableDictionary dictionary_, InterfaceLanguages.Languages lang) {
 
+        btnsortalphaasc = new JButton("sort alphabetically ascending");
+        lblsort = new JLabel("sort vocabulary");
+        btnsortalphadesc = new JButton("sort alphabetically descending");
+        btnsortratingasc = new JButton("sort by rating ascending");
+        btnsortratingdesc = new JButton("sort by rating descending");
+        lblfilter = new JLabel("filter vocabulary");
+        btnratingsubmit = new JButton("filter by selected rating");
+        btntagsubmit = new JButton("filter by selected tag");
         languages = new InterfaceLanguages();
         dictionary = dictionary_;
         interface_languages = lang;
@@ -109,11 +117,11 @@ public class studyInterface {
                 frame2.setSize(600, 400);
                 JPanel pane1 = new JPanel(new GridBagLayout());
                 GridBagConstraints c1 = new GridBagConstraints();
-                lblsort = new JLabel("sort vocabulary");
+
                 c1.gridx = 1;
                 c1.gridy = 0;
                 pane1.add(lblsort, c1);
-                btnsortalphaasc = new JButton("sort alphabetically ascending");
+
                 c1.gridx = 0;
                 c1.gridy = 1;
                 c1.insets = new Insets(10, 10, 10, 10);
@@ -125,7 +133,6 @@ public class studyInterface {
 
                 });
                 pane1.add(btnsortalphaasc, c1);
-                btnsortalphadesc = new JButton("sort alphabetically descending");
                 c1.gridx = 2;
                 c1.gridy = 1;
                 btnsortalphadesc.addActionListener(new ActionListener() {
@@ -137,7 +144,7 @@ public class studyInterface {
 
                 });
                 pane1.add(btnsortalphadesc, c1);
-                btnsortratingasc = new JButton("sort by rating ascending");
+
                 c1.gridx = 0;
                 c1.gridy = 2;
                 btnsortratingasc.addActionListener(new ActionListener() {
@@ -149,7 +156,7 @@ public class studyInterface {
 
                 });
                 pane1.add(btnsortratingasc, c1);
-                btnsortratingdesc = new JButton("sort by rating descending");
+
                 c1.gridx = 2;
                 c1.gridy = 2;
                 btnsortratingdesc.addActionListener(new ActionListener() {
@@ -161,7 +168,7 @@ public class studyInterface {
 
                 });
                 pane1.add(btnsortratingdesc, c1);
-                lblfilter = new JLabel("filter vocabulary");
+
                 c1.gridx = 1;
                 c1.gridy = 3;
                 pane1.add(lblfilter, c1);
@@ -169,7 +176,7 @@ public class studyInterface {
                 c1.gridx = 0;
                 c1.gridy = 4;
                 pane1.add(comboboxrating, c1);
-                btnratingsubmit = new JButton("filter by selected rating");
+
                 c1.gridx = 2;
                 c1.gridy = 4;
                 btnratingsubmit.addActionListener(new ActionListener() {
@@ -193,7 +200,7 @@ public class studyInterface {
                 c1.gridy = 5;
                 pane1.add(comboboxtag, c1);
 
-                btntagsubmit = new JButton("filter by selected tag");
+
                 c1.gridx = 2;
                 c1.gridy = 5;
                 btntagsubmit.addActionListener(new ActionListener() {
@@ -269,6 +276,18 @@ public class studyInterface {
         lblLang2.setText(languages.getString(lang, "to"));
         button.setText(languages.getString(lang, "show"));
         frame.setTitle(languages.getString(lang, "study"));
+
+        btnsort.setText(languages.getString(lang, "from"));
+        btnsortalphaasc.setText(languages.getString(lang, "from"));
+        btnsortalphadesc.setText(languages.getString(lang, "from"));
+        btnsortratingasc.setText(languages.getString(lang, "from"));
+        btnsortratingdesc.setText(languages.getString(lang, "from"));
+        btnratingsubmit.setText(languages.getString(lang, "from"));
+        btntagsubmit.setText(languages.getString(lang, "from"));
+        lblsort.setText(languages.getString(lang, "from"));
+        lblfilter.setText(languages.getString(lang, "from"));
+        btnsort.setText(languages.getString(lang, "from"));
+        btnsort.setText(languages.getString(lang, "from"));
     }
 
     public void setVisible(boolean visible)

@@ -7,6 +7,7 @@ import com.asdmorning3.test.InterfaceLanguages;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -19,6 +20,7 @@ public class VocableOverview {
 	private JFrame frame_;
 	private JScrollPane pane_;
 	private JTable table_;
+	private JButton button_;
 	private InterfaceLanguages.Languages interfaceLanguage_;
 	private ArrayList<List<Vocable>> vocable_list_;
 	private static int  WIDTH = 200;
@@ -28,6 +30,7 @@ public class VocableOverview {
 	private JPopupMenu popupMenu_;
 	private JMenuItem item_;
 	private VocableDictionary dict_;
+	private JPanel pane2_;
 
 	public void changeLanguage(InterfaceLanguages.Languages interfaceLanguage) {
 		if (interfaceLanguage == interfaceLanguage_)
@@ -47,6 +50,7 @@ public class VocableOverview {
 		item_ = new JMenuItem();
 		item_.setText(languages.getString(interfaceLanguage, "edit"));
 		dict_ = dict;
+		button_ = new JButton("filter");
 		changeLanguage(interfaceLanguage);
 		int i = 0;
 		for (Vocable.Language language: Vocable.Language.class.getEnumConstants())
@@ -61,6 +65,72 @@ public class VocableOverview {
 		CustomTableModel customTableModel = new CustomTableModel(data_, columns_);
 
 		table_ = new JTable(customTableModel);
+		table_.getTableHeader().setReorderingAllowed(false);
+
+		// listener
+		table_.getTableHeader().addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent mouseEvent) {
+				int headerCol = table_.columnAtPoint(mouseEvent.getPoint());
+				String headerName = table_.getColumnModel().getColumn(headerCol).getHeaderValue().toString();
+
+				Vocable.Language sortByLanguage = null;
+				boolean sortAsc = true;
+				boolean sortByRating = false;
+
+				String HeaderUpdate;
+
+				int rating_col = Vocable.Language.class.getEnumConstants().length;
+				if(headerCol == rating_col)
+					sortByRating = true;
+				else
+					sortByLanguage= Vocable.Language.class.getEnumConstants()[headerCol];
+
+				if(headerName.contains(("▲")))
+				{
+					table_.getColumnModel().getColumn(headerCol).setHeaderValue(headerName.replace("▲", "▼"));
+					HeaderUpdate = table_.getColumnModel().getColumn(headerCol).getHeaderValue().toString();
+					sortAsc = false;
+				}
+				else if(headerName.contains(("▼")))
+				{
+					table_.getColumnModel().getColumn(headerCol).setHeaderValue(headerName.replace("▼", "▲"));
+					HeaderUpdate = table_.getColumnModel().getColumn(headerCol).getHeaderValue().toString();
+				}
+				else
+				{
+					table_.getColumnModel().getColumn(headerCol).setHeaderValue(headerName + " ▲");
+					HeaderUpdate = table_.getColumnModel().getColumn(headerCol).getHeaderValue().toString();
+				}
+
+				//sort: param for method: sortByLanguage, sortAsc, sortByRating
+				String[][] newData = dict_.getTable(languages, interfaceLanguage_, sortByLanguage, sortAsc, sortByRating);
+				CustomTableModel customTableModel = new CustomTableModel(newData, columns_);
+				table_.setModel(customTableModel);
+				table_.getColumnModel().getColumn(headerCol).setHeaderValue(HeaderUpdate);
+				//table_.getTableHeader().setReorderingAllowed(false);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent mouseEvent) {
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent mouseEvent) {
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent mouseEvent) {
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent mouseEvent) {
+
+			}
+		});
 
 		table_.addMouseListener(new MouseListener() {
 			@Override
@@ -135,7 +205,14 @@ public class VocableOverview {
 		});
 
 		pane_ = new JScrollPane(table_);
+		pane2_ = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		pane2_.add(button_,c);
+		pane_.add(pane2_);
 		frame_.setSize(Vocable.Language.class.getEnumConstants().length * WIDTH, 400);
+		//frame_.add(pane2_);
 		frame_.add(pane_);
 		popupMenu_.add(item_);
 		table_.setComponentPopupMenu(popupMenu_);
