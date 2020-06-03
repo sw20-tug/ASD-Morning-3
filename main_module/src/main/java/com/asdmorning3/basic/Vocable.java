@@ -22,6 +22,19 @@ public class Vocable implements Serializable {
 	}
 
 	public void increaseDifficulty() {
+		System.out.print("increasing difficulty for: ");
+		for (int i = 0; i < Language.class.getEnumConstants().length; i++)
+		{
+			try{
+				System.out.print("("+ Language.class.getEnumConstants()[i].toString() +"): " + getTranslation(Language.class.getEnumConstants()[i]).word_ + "//");
+			}
+			catch (IllegalArgumentException e)
+			{
+				System.out.print("("+ Language.class.getEnumConstants()[i].toString() +"): " + word_ + "//");
+			}
+			catch (Exception ignored){}
+		}
+		System.out.print("\n");
 		if(rating_ == Difficulty.EASY)
 			rating_ = Difficulty.MEDIUM;
 		else if(rating_ == Difficulty.MEDIUM)
@@ -31,6 +44,18 @@ public class Vocable implements Serializable {
 	}
 
 	public void decreaseDifficulty() {
+		System.out.print("decreasing difficulty for: ");
+		for (int i = 0; i < Language.class.getEnumConstants().length; i++)
+		{
+			try{
+				System.out.print("("+ Language.class.getEnumConstants()[i].toString() +"): " + getTranslation(Language.class.getEnumConstants()[i]).word_ + "//");
+			}
+			catch (IllegalArgumentException e)
+			{
+				System.out.print("("+ Language.class.getEnumConstants()[i].toString() +"): " + word_ + "//");
+			}
+			catch (Exception ignored){}
+		}
 		if(rating_ == Difficulty.HARD)
 			rating_ = Difficulty.MEDIUM;
 		else if(rating_ == Difficulty.MEDIUM)
@@ -78,19 +103,19 @@ public class Vocable implements Serializable {
 
 	public void addTranslation(/*@NotNull*/ Vocable vocable) throws IllegalArgumentException
 	{
-		System.out.println(vocable.getLanguage() + "/" + language_ + "\t" + vocable.getWord()+"/"+word_);
+		//System.out.println(vocable.getLanguage() + "/" + language_ + "\t" + vocable.getWord()+"/"+word_);
 		if (vocable.getLanguage() == language_)
 		{
 			throw new IllegalArgumentException("Can't have a Translation from " + language_ + " to " + vocable.getLanguage()); //TODO constant for interface language
 		}
-		System.out.println(language_ + "->" + vocable.getLanguage());
+		System.out.println("Translation: " + language_ + "->" + vocable.getLanguage());
 		translation_.put(vocable.getLanguage(), vocable);
 		vocable.viceVersaTranslation(language_, this);
 	}
 
 	public void viceVersaTranslation(Language language, Vocable vocable)
 	{
-		System.out.println(language_ + "->" + vocable.getLanguage());
+		System.out.println("Translation: " + language_ + "->" + vocable.getLanguage());
 		translation_.put(language, vocable);
 	}
 

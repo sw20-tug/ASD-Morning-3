@@ -81,6 +81,9 @@ public class GUI {
         lblIntLang = new JLabel();
         comboBoxLang1 = new JComboBox<>(Vocable.Language.values());
         comboBoxLang2 = new JComboBox<>(Vocable.Language.values());
+        //i really dislike having to change language when starting
+        comboBoxLang1.setSelectedIndex(0);
+        comboBoxLang2.setSelectedIndex(1);
 
         frame.setSize(600, 600);
 
@@ -213,6 +216,9 @@ public class GUI {
                 public void actionPerformed(ActionEvent actionEvent) {
                     lang = itemLangs.get(temp);
                     setIntLang(lang);
+                    overview.setIntLang(lang);
+                    study.setIntLang(lang);
+                    test.setIntLang(lang);
                 }
             });
             itemLangs.put(temp, i);
@@ -275,6 +281,7 @@ public class GUI {
         tabbedPane.setTitleAt(1, languages.getString(lang, "overview"));
         tabbedPane.setTitleAt(2, languages.getString(lang, "study"));
         tabbedPane.setTitleAt(3, languages.getString(lang, "test"));
+        overview.setIntLang(lang);
     }
 
     private void refreshTabs()

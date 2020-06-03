@@ -60,14 +60,14 @@ public class studyInterface {
         GridBagConstraints c = new GridBagConstraints();
         frame.setSize(600, 600);
 
-        ArrayList<String> languages = new ArrayList<String>();
+        ArrayList<String> languages2 = new ArrayList<String>();
         for (Vocable.Language language : Vocable.Language.class.getEnumConstants()) {
-            languages.add(language.name());
+            languages2.add(language.name());
             language_list.put(language.name(), language);
         }
 
-        final JComboBox fromLanguage = new JComboBox(new DefaultComboBoxModel<String>(languages.toArray(new String[0])));
-        toLanguage = new JComboBox(new DefaultComboBoxModel<String>(languages.toArray(new String[0])));
+        final JComboBox fromLanguage = new JComboBox(new DefaultComboBoxModel<String>(languages2.toArray(new String[0])));
+        toLanguage = new JComboBox(new DefaultComboBoxModel<String>(languages2.toArray(new String[0])));
         final JComboBox setAnotherLanguage;
 
         c.gridx = 0;
@@ -113,8 +113,8 @@ public class studyInterface {
         btnsort = new JButton("sort/filter");
         btnsort.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JFrame frame2 = new JFrame("sort/filter");
-                frame2.setSize(600, 400);
+                JFrame frame2 = new JFrame(languages.getString(interface_languages, "sort/filter"));
+                frame2.setSize(800, 400);
                 JPanel pane1 = new JPanel(new GridBagLayout());
                 GridBagConstraints c1 = new GridBagConstraints();
 
@@ -276,18 +276,18 @@ public class studyInterface {
         lblLang2.setText(languages.getString(lang, "to"));
         button.setText(languages.getString(lang, "show"));
         frame.setTitle(languages.getString(lang, "study"));
+        btnsort.setText(languages.getString(lang, "sort/filter"));
 
-        btnsort.setText(languages.getString(lang, "from"));
-        btnsortalphaasc.setText(languages.getString(lang, "from"));
-        btnsortalphadesc.setText(languages.getString(lang, "from"));
-        btnsortratingasc.setText(languages.getString(lang, "from"));
-        btnsortratingdesc.setText(languages.getString(lang, "from"));
-        btnratingsubmit.setText(languages.getString(lang, "from"));
-        btntagsubmit.setText(languages.getString(lang, "from"));
-        lblsort.setText(languages.getString(lang, "from"));
-        lblfilter.setText(languages.getString(lang, "from"));
-        btnsort.setText(languages.getString(lang, "from"));
-        btnsort.setText(languages.getString(lang, "from"));
+        btnsortalphaasc.setText(languages.getString(lang, "sortalphaasc"));
+        btnsortalphadesc.setText(languages.getString(lang, "sortalphadesc"));
+        btnsortratingasc.setText(languages.getString(lang, "sortratingasc"));
+        btnsortratingdesc.setText(languages.getString(lang, "sortratingdesc"));
+        btnratingsubmit.setText(languages.getString(lang, "ratingsubmit"));
+        btntagsubmit.setText(languages.getString(lang, "tagsubmit"));
+        lblsort.setText(languages.getString(lang, "sort"));
+        lblfilter.setText(languages.getString(lang, "filter"));
+
+        interface_languages = lang;
     }
 
     public void setVisible(boolean visible)
@@ -472,5 +472,5 @@ public class studyInterface {
 
         return model;
     }
-    
+
 }
