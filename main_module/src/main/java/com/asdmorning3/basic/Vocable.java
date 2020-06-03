@@ -103,19 +103,19 @@ public class Vocable implements Serializable {
 
 	public void addTranslation(@NotNull Vocable vocable) throws IllegalArgumentException
 	{
-		System.out.println(vocable.getLanguage() + "/" + language_ + "\t" + vocable.getWord()+"/"+word_);
+		//System.out.println(vocable.getLanguage() + "/" + language_ + "\t" + vocable.getWord()+"/"+word_);
 		if (vocable.getLanguage() == language_)
 		{
 			throw new IllegalArgumentException("Can't have a Translation from " + language_ + " to " + vocable.getLanguage()); //TODO constant for interface language
 		}
-		System.out.println(language_ + "->" + vocable.getLanguage());
+		System.out.println("Translation: " + language_ + "->" + vocable.getLanguage());
 		translation_.put(vocable.getLanguage(), vocable);
 		vocable.viceVersaTranslation(language_, this);
 	}
 
 	public void viceVersaTranslation(Language language, Vocable vocable)
 	{
-		System.out.println(language_ + "->" + vocable.getLanguage());
+		System.out.println("Translation: " + language_ + "->" + vocable.getLanguage());
 		translation_.put(language, vocable);
 	}
 

@@ -269,6 +269,7 @@ public class studyInterface {
         lblLang2.setText(languages.getString(lang, "to"));
         button.setText(languages.getString(lang, "show"));
         frame.setTitle(languages.getString(lang, "study"));
+        btnsort.setText(languages.getString(lang, "sort/filter"));
     }
 
     public void setVisible(boolean visible)
@@ -453,5 +454,5 @@ public class studyInterface {
 
         return model;
     }
-    
+
 }

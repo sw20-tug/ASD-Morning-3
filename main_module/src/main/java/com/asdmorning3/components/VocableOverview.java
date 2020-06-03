@@ -29,12 +29,18 @@ public class VocableOverview {
 	private JMenuItem item_;
 	public VocableDictionary dict_;
 
-	public void changeLanguage(InterfaceLanguages.Languages interfaceLanguage) {
+	public void setIntLang(InterfaceLanguages.Languages interfaceLanguage) {
 		if (interfaceLanguage == interfaceLanguage_)
 			return;
 		this.interfaceLanguage_ = interfaceLanguage;
 		frame_.setName(languages.getString(interfaceLanguage_, "overview"));
 		item_.setText(languages.getString(interfaceLanguage_, "edit"));
+		int i = 0;
+		for (Vocable.Language language: Vocable.Language.class.getEnumConstants())
+		{
+			table_.getColumnModel().getColumn(i++).setHeaderValue(languages.getString(interfaceLanguage, Vocable.getLanguageWord(language)));
+		}
+		table_.getColumnModel().getColumn(i).setHeaderValue(languages.getString(interfaceLanguage, "difficulty"));
 		String value;
 		ArrayList<String> row_strings;
 		for (int row = 0; row < table_.getRowCount(); row++)
@@ -58,20 +64,18 @@ public class VocableOverview {
 		item_ = new JMenuItem();
 		item_.setText(languages.getString(interfaceLanguage, "edit"));
 		dict_ = dict;
-		changeLanguage(interfaceLanguage);
+		String data_[][] = dict.getTable(languages, interfaceLanguage_);
 		int i = 0;
 		for (Vocable.Language language: Vocable.Language.class.getEnumConstants())
 		{
-			columns_[i] = Vocable.getLanguageWord(language);
-			i++;
+			columns_[i++] = languages.getString(interfaceLanguage, Vocable.getLanguageWord(language));
 		}
-		columns_[i] = "Difficulty";
+		columns_[i] = languages.getString(interfaceLanguage, "difficulty");
 
-
-		String data_[][] = dict.getTable(languages, interfaceLanguage_);
 		CustomTableModel customTableModel = new CustomTableModel(data_, columns_);
-
 		table_ = new JTable(customTableModel);
+		table_.getTableHeader().setReorderingAllowed(false);
+		setIntLang(interfaceLanguage);
 
 		table_.addMouseListener(new MouseListener() {
 			@Override
@@ -126,22 +130,34 @@ public class VocableOverview {
 		item_.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				if (table_.getSelectedColumn() == table_.getColumnCount() -1)
-				{
+				if (table_.getSelectedColumn() == table_.getColumnCount() - 1) {
 					return;
 				}
-				if(!data_[table_.getSelectedRow()][table_.getSelectedColumn()].equals("")){
-					Vocable v = dict_.findVocable(data_[table_.getSelectedRow()][table_.getSelectedColumn()],
+				Vocable v = null;
+				if (!data_[table_.getSelectedRow()][table_.getSelectedColumn()].equals("")) {
+					v = dict_.findVocable(data_[table_.getSelectedRow()][table_.getSelectedColumn()],
 							Vocable.Language.class.getEnumConstants()[table_.getSelectedColumn()]).get(0);
-					Edit e = new Edit(frame_, dict_, v, interfaceLanguage_);
-					dict_ = e.edit();
-					String[] newData = dict_.getTable(languages, interfaceLanguage_)[table_.getSelectedRow()];
-					for(int c = 0; c < Vocable.Language.class.getEnumConstants().length; c++) {
-						table_.setValueAt(newData[c], table_.getSelectedRow(), c);
-						data_[table_.getSelectedRow()][c] = newData[c];
+
+				} else {
+					for(int i = 0; i < table_.getColumnCount() - 1; i++){
+						if(data_[table_.getSelectedRow()][i].equals(""))
+							continue;
+						v = dict_.findVocable(data_[table_.getSelectedRow()][i],
+								Vocable.Language.class.getEnumConstants()[i]).get(0);
+						break;
 					}
-					assert((String[])data_[table_.getSelectedRow()] == newData);
+					if(v == null)
+						return;
 				}
+				Edit e = new Edit(frame_, dict_, v, interfaceLanguage_);
+				dict_ = e.edit();
+				String[] newData = dict_.getTable(languages, interfaceLanguage_)[table_.getSelectedRow()];
+				for (int c = 0; c < Vocable.Language.class.getEnumConstants().length; c++) {
+					table_.setValueAt(newData[c], table_.getSelectedRow(), c);
+					data_[table_.getSelectedRow()][c] = newData[c];
+					data_[table_.getSelectedRow()][c] = newData[c];
+				}
+				assert ((String[]) data_[table_.getSelectedRow()] == newData);
 			}
 		});
 
@@ -194,5 +210,4 @@ public class VocableOverview {
 			return true;
 		}
 	}
-
 }
